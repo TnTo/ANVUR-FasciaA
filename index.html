@@ -1,0 +1,317 @@
+<!doctype html>
+
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>ANVUR - Fascia A</title>
+
+    <style>
+        input {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .section {
+            padding-bottom: 5px;
+        }
+
+        input[type=text] {
+            padding: 2px;
+        }
+    </style>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+</head>
+
+<body>
+    <h1>ANVUR - Fascia A</h1>
+    <p>Scegliere i settori concorsuali attraverso la casella di testo che dovrebbe implementare una funzione di
+        autocompletamento. <br>
+        Nel dubbio inserire il numero della macroarea e scegliere dal menù a tendina.</p>
+    <p>Per il filtro Fascia A / Scientifica viene considerato lo stato della rivista all'ultimo aggiornamento
+        (attualmente 22/1/2022).</p>
+    <datalist id="settori"></datalist>
+    <script>
+        const settori = [
+            "08/C1 – Design e progettazione tecnologica dell'architettura",
+            "08/D1 – Progettazione architettonica",
+            "08/E1 – Disegno",
+            "08/E2 – Restauro e storia dell'architettura",
+            "08/F1 – Pianificazione e progettazione urbanistica e territoriale",
+            "10/A1 – Archeologia",
+            "10/B1 – Storia dell'arte",
+            "10/C1 – Musica, teatro, cinema, televisione e media audiovisivi",
+            "10/D1 – Storia antica",
+            "10/D2 – Lingua e letteratura greca",
+            "10/D3 – Lingua e letteratura latina",
+            "10/D4 – Filologia classica e tardoantica",
+            "10/E1 – Filologie e letterature medio-latina e romanze",
+            "10/F1 – Letteratura italiana",
+            "10/F2 – Letteratura italiana contemporanea",
+            "10/F3 – Linguistica e filologia italiana",
+            "10/F4 – Critica letteraria e letterature comparate",
+            "10/G1 – Glottologia e linguistica",
+            "10/H1 – Lingua, letteratura e cultura francese",
+            "10/I1 – Lingue, letterature e culture spagnola e ispano-americane",
+            "10/L1 – Lingue, letterature e culture inglese e anglo-americana",
+            "10/M1 – Lingue, letterature e culture germaniche",
+            "10/M2 – Slavistica",
+            "10/N1 – Culture del Vicino Oriente antico, del Medio Oriente e dell'Africa",
+            "10/N3 – Culture dell'Asia centrale e orientale",
+            "11/A1 – Storia medievale",
+            "11/A2 – Storia moderna",
+            "11/A3 – Storia contemporanea",
+            "11/A4 – Scienze del libro e del documento e scienze storico religiose",
+            "11/A5 – Scienze demoetnoantropologiche",
+            "11/B1 – Geografia",
+            "11/C1 – Filosofia teoretica",
+            "11/C2 – Logica, storia e filosofia della scienza",
+            "11/C3 – Filosofia morale",
+            "11/C4 – Estetica e filosofia dei linguaggi",
+            "11/C5 – Storia della filosofia",
+            "11/D1 – Pedagogia e storia della pedagogia",
+            "11/D2 – Didattica, pedagogia speciale e ricerca educativa",
+            "11/E1 – Psicologia generale, psicobiologia e psicometria",
+            "11/E2 – Psicologia dello sviluppo e dell'educazione",
+            "11/E3 – Psicologia sociale, del lavoro e delle organizzazioni",
+            "11/E4 – Psicologia clinica e dinamica",
+            "12/A1 – Diritto privato",
+            "12/B1 – Diritto commerciale",
+            "12/B2 – Diritto del lavoro",
+            "12/C1 – Diritto costituzionale",
+            "12/C2 – Diritto ecclesiastico e canonico",
+            "12/D1 – Diritto amministrativo",
+            "12/D2 – Diritto tributario",
+            "12/E1 – Diritto internazionale",
+            "12/E2 – Diritto comparato",
+            "12/E3 – Diritto dell'economia, dei mercati finanziari e agroalimentari e della navigazione",
+            "12/E4 – Diritto dell'Unione europea",
+            "12/F1 – Diritto processuale civile",
+            "12/G1 – Diritto penale",
+            "12/G2 – Diritto processuale penale",
+            "12/H1 – Diritto romano e diritti dell'antichità",
+            "12/H2 – Storia del diritto medievale e moderno",
+            "12/H3 – Filosofia del diritto",
+            "13/A1 – Economia politica",
+            "13/A2 – Politica economica",
+            "13/A3 – Scienza delle finanze",
+            "13/A4 – Economia applicata",
+            "13/A5 – Econometria",
+            "13/B1 – Economia aziendale",
+            "13/B2 – Economia e gestione delle imprese",
+            "13/B3 – Organizzazione aziendale",
+            "13/B4 – Economia degli intermediari finanziari e finanza aziendale",
+            "13/B5 – Scienze merceologiche",
+            "13/C1 – Storia economica",
+            "13/D1 – Statistica",
+            "13/D2 – Statistica economica",
+            "13/D3 – Demografia e statistica sociale",
+            "13/D4 – Metodi matematici dell'economia e delle scienze attuariali e finanziarie",
+            "14/A1 – Filosofia politica",
+            "14/A2 – Scienza politica",
+            "14/B1 – Storia delle dottrine e delle istituzioni politiche",
+            "14/B2 – Storia delle relazioni internazionali, delle società e delle istituzioni extraeuropee",
+            "14/C1 – Sociologia generale",
+            "14/C2 – Sociologia dei processi culturali e comunicativi",
+            "14/C3 – Sociologia dei fenomeni politici e giuridici",
+            "14/D1 – Sociologia dei processi economici, del lavoro, dell'ambiente e del territorio"
+        ];
+
+        var list = $("#settori");
+
+        for (settore of settori) {
+            list.append($(document.createElement("option")).attr('value', settore));
+        }
+
+        ;
+
+        const promise = $.getJSON("riviste.json");
+
+        function add_form_settore() {
+            $("#add-settore").before($(document.createElement("div")).attr('class', "settore").append($(document.createElement("input")).attr({
+                'size': 70, 'placeholder': "Settore Concorsuale", 'list': "settori", 'class': "settore-text"
+
+            }),
+                $(document.createElement("button")).text("X").css({
+                    "margin-left": "2px"
+
+                }).attr({
+                    'class': "settore-button", 'type': "button"
+
+                }).hide().on('click', function () {
+                    $(this).parent().remove();
+
+                    if ($(".settore").length == 1) {
+                        $(".settore-button").hidden();
+                        $("#logic").hidden();
+                    }
+
+                    ;
+                })));
+        }
+
+    </script>
+    <form onkeydown="return event.key != 'Enter';">
+        <div id="settori" class="section"><label><b>Scegliere i settori concorsuali di interesse</b></label><br><button
+                id="add-settore" type="button">Aggiungi Settore Concorsuale</button>
+            <script>$("#add-settore").on('click', function () {
+                    add_form_settore();
+                    $(".settore-button").show();
+                    $("#logic").show();
+                });
+                add_form_settore();
+
+            </script>
+        </div>
+        <div id="fascia" class="section"><label><b>Mostrare tutte le rivite Scientifiche o solo quelle in Classe
+                    A?</b></label><br><input type="radio" id="S" name="fascia" value="S"><label
+                for="S">Scientifica</label><br><input type="radio" id="A" name="fascia" value="A" checked><label
+                for="A">Classe A</label></div>
+        <div id="logic" class="section" hidden><label><b>Mostrare le rivite che soddisfano i requisiti per tutti i
+                    settori o per almeno uno di essi?</b></label><br><input type="radio" id="AND" name="logic"
+                value="AND" checked><label for="AND">Tutte</label><br><input type="radio" id="OR" name="logic"
+                value="OR"><label for="OR">Almeno uno</label></div>
+        <script>function show() {
+                var fasciaA;
+
+                switch ($("input[name='fascia']:checked").val()) {
+                    case 'A':
+                        var fasciaA = true;
+                        break;
+                    case 'S':
+                        var fasciaA = false;
+                        break;
+                }
+
+                switch ($("input[name='logic']:checked").val()) {
+                    case 'AND':
+                        var inclusive = false;
+                        break;
+                    case 'OR':
+                        var inclusive = true;
+                        break;
+                }
+
+                var sel_sett = [...(new Set($(".settore-text").toArray().map(x => x.value.substring(0, 5)).filter(function (x) {
+                    return x.length != 0
+                })))];
+                var sel_area = [...(new Set(sel_sett.map(x => "Area ".concat(x.substring(0, 2)))))];
+
+                if (sel_sett.length > 0) {
+                    $("#table-div").show();
+                }
+
+                var colonne = ["TITOLO", "ISSN"];
+
+                riviste = promise.done(function (data) {
+                    var rows = data.filter(
+                        function (r) {
+                            if (fasciaA) {
+                                var bools = sel_sett.map(s => {
+                                    if (r[s] === null) {
+                                        return false
+                                    }
+
+                                    else {
+                                        return (r[s].substring(0, 1) == 'A')
+                                    }
+                                })
+                            }
+
+                            else {
+                                var bools = sel_area.map(a => {
+                                    if (r[a] === null) {
+                                        return false
+                                    }
+
+                                    else {
+                                        return (r[a].substring(0, 1) == 'S')
+                                    }
+                                })
+                            }
+
+                            if (inclusive) {
+                                return bools.some(x => x)
+                            }
+
+                            else {
+                                return bools.every(x => x)
+                            }
+                        }
+                    ).map(
+                        function (r) {
+                            let row = colonne.map(col => r[col]);
+
+                            for (s of sel_sett) {
+                                if (r[s] === null) {
+                                    var a = "Area ".concat(s.substring(0, 2));
+
+                                    if (r[a] === null) {
+                                        row.push("");
+                                    }
+
+                                    else {
+                                        row.push(r[a]);
+                                    }
+                                }
+
+                                else {
+                                    if (r[s].substring(0, 1) == 'A') {
+                                        row.push(r[s]);
+                                    }
+
+                                    else {
+                                        // ‡
+                                        var a = "Area ".concat(s.substring(0, 2));
+
+                                        if (r[a].substring(0, 1) == 'S') {
+                                            row.push(r[a]);
+                                        }
+
+                                        else {
+                                            row[s].push(r[s]);
+                                        }
+                                    }
+                                }
+                            }
+
+                            return row;
+                        }
+                    );
+
+                    if (rows.length == 0) { rows = [] }
+                    $('#table').DataTable({
+                        data: rows,
+                        columns: colonne.concat(sel_sett).map(function (x) { return { title: x } }),
+                        paging: false,
+                        destroy: true,
+                    });
+                });
+
+            }
+
+        </script><button type="button" onclick="show()">Mostra</button>
+    </form>
+    <div id="table-div" hidden>
+        <ul id="legenda">
+            <li><b>S</b>: Scientifica</li>
+            <li><b>‡(anno)</b>: Scientifica fino al 31.12.anno - Le pubblicazioni successive a tale data non saranno
+                ritenute scientifiche</li>
+            <li><b>S(anno)</b>: Scientifica a partire dal 01.01.anno - Solo le pubblicazioni successive a tale data sono
+                ritenute scientifiche</li>
+            <li><b>A</b>: In Classe A</li>
+            <li><b>‡(anno)</b>: In Classe A fino al 31.12.anno - Le pubblicazioni successive a tale data non saranno
+                considerate di Classe A</li>
+            <li><b>A(anno)</b>: In Classe A a partire dal 01.01.anno - Solo le pubblicazioni successive a tale data sono
+                di Classe A</li>
+        </ul>
+        <table id="table" width="100%" class="display"></table>
+    </div>
+</body>
+
+</html>
