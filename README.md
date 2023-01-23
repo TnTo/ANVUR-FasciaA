@@ -10,7 +10,7 @@ I file sono stati generati il 02/01/2023 sulla base dell'aggiornamento del 22/12
 
 Nelle colonne delle macro-aree una rivista può essere:
 + `S`: Scientifica
-+ `‡(anno)`: Scientifica fino al 31.12.anno - Le pubblicazioni successive a tale data non saranno ritenute scienƟfiche
++ `‡(anno)`: Scientifica fino al 31.12.anno - Le pubblicazioni successive a tale data non saranno ritenute scientifiche
 + `S(anno)`: Scientifica a partire dal 01.01.anno - Solo le pubblicazioni successive a tale data sono ritenute scientifiche
 
 Nelle colonne dei settori concorsuali una rivista può essere:
