@@ -4,7 +4,7 @@ Questo script compila una tabelle delle riviste scientifiche delle diverse aree 
 
 La lista delle riviste è presa direttamente dal sito di ANVUR (https://www.anvur.it/attivita/classificazione-delle-riviste/classificazione-delle-riviste-ai-fini-dellabilitazione-scientifica-nazionale/elenchi-di-riviste-scientifiche-e-di-classe-a/).
 
-I file sono stati generati il 02/01/2023 sulla base dell'aggiornamento del 22/12/2022.
+I file sono stati generati il 10/03/2023 sulla base dell'aggiornamento del 03/03/2023.
 
 ## Legenda
 
