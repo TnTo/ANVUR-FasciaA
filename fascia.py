@@ -5,12 +5,20 @@ import pandas
 import requests
 import tabula
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 # %%
-tree = BeautifulSoup(
-    requests.get(
+options = webdriver.FirefoxOptions()
+options.add_argument('-headless')
+driver = webdriver.Firefox(options=options)
+
+# %%
+driver.get(
         "https://www.anvur.it/attivita/classificazione-delle-riviste/classificazione-delle-riviste-ai-fini-dellabilitazione-scientifica-nazionale/elenchi-di-riviste-scientifiche-e-di-classe-a/"
-    ).text,
+    )
+tree = BeautifulSoup(
+    driver.page_source,
     "lxml",
 )
 
@@ -37,3 +45,4 @@ rs.to_csv("riviste.csv", index=False)
 rs.to_json("riviste.json", orient="records")
 
 # %%
+driver.close()

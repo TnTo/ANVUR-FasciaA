@@ -1,0 +1,9 @@
+name: anvur
+
+dependencies:
+  - python
+  - tabula-py
+  - selenium
+  - BeautifulSoup4
+  - lxml
+  - openpyxl
